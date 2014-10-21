@@ -9,25 +9,35 @@
         
 		<script type="text/javascript" src="js/jquery.js"></script>
 		<script type="text/javascript" src="js/jquery.mobile-1.3.2.min.js"></script>
-   		
+<script type="application/javascript">
+ //跳转
+function returnPages(url){
+	window.location=url;	
+}
+</script>   		
 		<title>设置</title>
 
 <body>
 
 <div data-role="page">
-  <div data-role="content">
- <div class="ui-grid-b">
- 
-     <div class="ui-block-a" style="text-align:right; width:22%;margin-top:15px"><span>要去哪:</span></div>
-     <div class="ui-block-b" style="width:75%"><input type="text" name="fname" id="fname"></div>
-     
-     <div class="ui-block-a" style="text-align:right; width:100px;margin-top:15px"></div>
-     <div class="ui-block-b"><input type="button" data-inline="true" value="提交"></div>
-</div>     
-      
-      
-
+  <div data-role="header">
+      <a href="#" data-role="button" data-icon="home" data-iconpos="notext" class="ui-btn-right" rel="external" onclick="returnPages('index.html')"></a>
+      <h1>设置</h1>
   </div>
+  
+
+  <div data-role="content">
+<ul data-role="listview">
+   <li data-icon="false">
+        	<a href="#" onclick="returnPages('jcsjpage.html')">
+            	<img src="images/sz.png" width="50px" height="50px" style="margin-left:12px; margin-top:12px">
+                	<h3 style="margin-top:10px; margin-left:-20px; font-size:25px">去哪基础数据设置</h3>
+            </a>
+        </li>
+</ul>
+  
+  </div>
+  
 </div>
 
 </body>
