@@ -1,0 +1,81 @@
+<html>
+<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>jQuery表格修饰：隔行换色,点击变色,多选单选变色丨芯晴网页特效丨CsrCode.Cn</title>
+<script type="text/javascript" src="js/jquery.js"></script>
+<SCRIPT LANGUAGE="JavaScript">
+<!--
+$(document).ready(function(){
+//demo1:
+   //-隔行,滑动,点击 变色
+ $('.cssraindemo1 tbody tr:even').addClass('odd');
+ $('.cssraindemo1 tbody tr').hover(
+  function() {$(this).addClass('highlight');},
+  function() {$(this).removeClass('highlight');}
+ );
+ $('.cssraindemo1 tbody tr').click(
+  function() {$(this).toggleClass('selected');}
+ );
+
+});
+ 
+//-->
+</SCRIPT>
+<style type="text/css">
+h1   { font:bold 20px/26px Arial;}
+table  { border:0;border-collapse:collapse;}
+td { font:normal 12px/17px Arial;padding:2px;width:100px;}
+th   { font:bold 12px/17px Arial;text-align:left;padding:4px;border-bottom:1px solid #333;}
+tr.odd  { background:#FFF3BF;}
+tr.highlight { background:#6F4DFF;}
+tr.selected  { background:#aaaaaa;color:#fff;}
+</style>
+</head>
+<body> 
+<font color=red>如果不显示预览效果，请先刷新本页面</font>
+<!-- demo1 -->
+<h1>Demo1--隔行,滑动,点击 变色.</h1>
+<table class="cssraindemo1">
+<thead>
+<tr>
+ <th>姓名</th>
+ <th>性别</th>
+ <th>暂住地</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>张山</td>
+ <td>男</td>
+ <td>浙江宁波</td>
+</tr>
+<tr>
+ <td>李四</td>
+ <td>女</td>
+ <td>浙江杭州</td>
+</tr>
+<tr>
+ <td>王五</td>
+ <td>男</td>
+ <td>湖南长沙</td>
+</tr>
+<tr>
+ <td>找六</td>
+ <td>男</td>
+ <td>浙江温州</td>                            
+</tr>
+<tr>
+ <td>Rain</td>
+ <td>男</td>
+ <td>浙江杭州</td>
+</tr>
+<tr>
+ <td>MAXMAN</td>
+ <td>女</td>
+ <td>浙江杭州</td>
+</tr>
+</tbody>
+</table>
+
+</body>
+</html>

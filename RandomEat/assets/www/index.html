@@ -11,6 +11,7 @@
 		<script type="text/javascript" src="js/jquery.mobile-1.3.2.min.js"></script>
    		
 		<title>主页</title>
+       
 <style type="text/css">
 body{background-color:#fff; height:auto}
     body {text-align:center;}
@@ -126,6 +127,10 @@ function stopsj(){
 }
 //跳转设置界面
 function jumpSetting(){
+	/*$.mobile.changePage("setting.html",{ //app中能执行
+      	  transition:'slideup'
+   		 });*/
+
 	window.location="setting.html";
 	
 		//$.mobile.changePage("setting.html","pop"); 
@@ -134,7 +139,7 @@ function jumpSetting(){
 //   		 },"pop",false,false);
 
 
-$.mobile.loadPage('setting.html');
+//$.mobile.loadPage('setting.html');
 
 
 //window.history.pushState({},0,'setting.html');      

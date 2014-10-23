@@ -7,11 +7,59 @@
 <!-- <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />-->
 		<link rel="stylesheet" href="css/jquery.mobile-1.3.2.min.css">
         
+        <script type="text/javascript" src="js/template.js"></script>
 		<script type="text/javascript" src="js/jquery.js"></script>
 		<script type="text/javascript" src="js/jquery.mobile-1.3.2.min.js"></script>
+        
+        <link href="js/js_css/yu.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/js_css/yu.js"></script>
+<SCRIPT LANGUAGE="JavaScript">
+<!--
+$(document).ready(function(){
+ 
+});
+ 
+//-->
+</SCRIPT>
+<style type="text/css">
+tr.selected  { background:#999;color:#fff;}
+</style>
+
+
+
+
+  
+        
 <script type="application/javascript">
   var randomEatdb = window.openDatabase("RandomEatdb", "1.0","数据库描述",20000);
 /*--------------------------------------------------------database--------------------------------------------------------------*/
+  var checkboxdata; 
+	  randomEatdb.transaction(function(tx) {
+		var sql='select * from RandomEatInfo';
+			  tx.executeSql(sql, [],
+			  function(tx, result) {
+if(result.rows.length == 0){
+	ui.success('基础数据现在为空，请添加！');
+    setTimeout("returnPages(\"jcsjpage.html#pageone\")",700);
+	return;
+}				
+				  checkboxdata ="[";
+					  for(var i = 0; i < result.rows.length; i++){
+							checkboxdata +="{'guid':'"+result.rows.item(i)['guid']+"','toeatname':'"+result.rows.item(i)['toeatname']+"'},";  
+					  }
+				  checkboxdata = checkboxdata.substring(0,checkboxdata.length-1);
+       			  checkboxdata+="]";
+		          var resultdata = eval(checkboxdata);
+
+
+var html = template('listviewlist', resultdata);
+document.getElementById('lbdiv').innerHTML = html;
+
+			  })
+});
+
+
+
 //生成GUID
 function newGuid()
 {
@@ -29,13 +77,24 @@ function newGuid()
 function submitform(){
 	var toeatname = $("#toeatname").val().replace(/-/g, "");
 	if(toeatname =='' || toeatname==null){
-		alert("要去哪名称不能为空！");
+		ui.alert("要去哪名称不能为空！");
 		return;
 }
 randomEatdb.transaction(function(tx) {
 	var guid = newGuid();
   	tx.executeSql("INSERT INTO RandomEatInfo (guid,toeatname) values(?,?)", [guid,toeatname], 
-		function(tx,result){ alert('操作成功');$("#toeatname").val('');}, function(tx, error){ alert('操作失败:' + error.message)}
+		function(tx,result){
+			$("#toeatname").val('');
+			
+			$("#submitsuccessid").show();
+			setTimeout("$(\"#submitsuccessid\").hide()",1000);
+			setTimeout("$(\"#submitsuccessid\").show()",1500);
+			setTimeout("$(\"#submitsuccessid\").hide()",2500);
+			setTimeout("$(\"#submitsuccessid\").show()",3500);
+			setTimeout("$(\"#submitsuccessid\").hide()",4000);
+
+		},
+	    function(tx, error){ alert('操作失败:' + error.message)}
 	
 	);
   });
@@ -47,10 +106,160 @@ randomEatdb.transaction(function(tx) {
 function returnPages(url){
 	window.location=url;	
 }
-</script>   		
-		<title>设置</title>
 
+
+
+function testchecked(){
+	/*$("#yxhj").attr("checked","checked");*/	
+ var spCodesTemp = "";
+      $('input:checkbox:checked').each(function(i){
+		  alert(i+"<--i");
+       if(0==i){
+		   alert($(this).attr('id'));
+        spCodesTemp = $(this).val();
+       }else{
+        spCodesTemp += (","+$(this).val());
+       }
+      });
+    alert(spCodesTemp);
+ 
+ 
+}
+
+//
+function clickCheckBoxOne(){
+	alert($('input:checkbox:checked').length);
+	
+}
+//删除选中的信息
+function deleterandomeatdata(){
+//			var deleteCount =$('input:checkbox:checked').length;//选中，要删除的条数
+			var deleteCount =$('[class=selected]').length;//选中，要删除的条数
+			if(deleteCount != 0){
+	
+			ui.confirm('删除选中信息？',function(z){
+				if(z){//点击确定删除
+		
+					 $('[class=selected]').each(function(i){
+					
+						var guid = $(this).attr('id');
+						randomEatdb.transaction(function(tx) {
+							 tx.executeSql("DELETE FROM RandomEatInfo WHERE guid=?",[guid], 
+							 function(tx,result){if((i+1)==deleteCount){ 
+								ui.success('删除成功！');
+								setTimeout("window.location.reload()",700);}}, 
+							 function(tx, error){ 
+								ui.alert('操作失败:' + error.message);
+								window.location.reload();return;})
+						});/*transaction*/
+					
+					 });//each
+					
+				}else{/*if(z)*/
+						return;      
+				}
+		},true);/*ui.confirm*/
+	
+}else{//if 判断是否选中
+				ui.alert("请至少选择一条数据进行操作！");
+			}
+				
+}
+
+//点击tr选中checkbox--暂未使用
+function tronclick(a){
+//	$(this).attr("checked","checked");	
+$(a).toggleClass('selected');
+/*	 $('.cssraindemo1 tbody tr').click(
+	  	function() {$(this).toggleClass('selected');}
+	 );*/
+
+
+}
+//在添加页面，点击列表页，只跳转，不刷新，此处手动刷新
+function refreshList(){
+	returnPages("jcsjpage.html");
+//	window.location.reload();
+}
+
+
+</script>   		
+
+
+
+		<title>设置</title>  
 <body>
+
+<div data-role="page" id="pagetwo">
+  <div data-role="header" data-position="fixed">
+      <a href="#" data-role="button" data-icon="home" data-iconpos="notext" class="ui-btn-right" rel="external" onclick="returnPages('index.html')"></a>
+      <h1>列表</h1>
+  </div>
+  
+
+<div data-role="content">
+   
+<div id="lbdiv" >
+    		
+</div>     
+
+<script id="listviewlist" type="text/html">
+<table width='100%'  border="1" cellspacing="0" cellpadding="0" id="listtabaleid" class="cssraindemo1">
+<thead>
+  <tr>
+    <th scope="col" style="padding:5px 0 5px 0;font-size:16px; font-weight:900">序号</th>
+    <th scope="col" style="padding:5px 0 5px 0;font-size:16px; font-weight:900">去哪名称</th>
+  </tr>
+<thead>  
+<tbody>  
+    {{each  as value i}}
+
+      <tr onclick="tronclick(this)" id="{{value.guid}}">
+		<td style="text-align:center;font-size:16px;font-weight:900;">{{i+1}}</td>
+		<td style="text-align:center;font-size:16px;font-weight:900;padding:5px 0 5px 0;" width='80%' >{{value.toeatname}}</td>
+	  </tr>
+
+    {{/each}}
+		
+</tbody>  
+</table>
+
+	   
+
+</script>
+   
+
+      
+     
+
+</div><!--content-->
+
+<center>
+  <div data-role="footer" data-position="fixed" style="">
+    <a href="#pagetwo" data-role="button" data-icon="grid" >列表</a>
+    <a href="#pageone" data-role="button" data-icon="plus">添加</a>
+    <a href="#" data-role="button" data-icon="delete" onclick="deleterandomeatdata()">删除</a>        
+  </div>
+</center>
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <div data-role="page" id="pageone">
   <div data-role="header" data-position="fixed">
@@ -61,12 +270,15 @@ function returnPages(url){
 
   <div data-role="content">
  <div class="ui-grid-b">
- 
      <div class="ui-block-a" style="text-align:right; width:22%;margin-top:15px"><span>要去哪:</span></div>
      <div class="ui-block-b" style="width:75%"><input type="text" name="toeatname" id="toeatname"></div>
      
      <div class="ui-block-a" style="text-align:right; width:22%;margin-top:15px"></div>
      <div class="ui-block-b" style="width:75%"><input type="button" data-inline="true" value="提交" onclick="submitform()"></div>
+     
+     <div style="text-align:right; width:60%;margin-top:15px; display:none" id="submitsuccessid">
+     	<span style=" color:#F00; font-size:16px; font-weight:900">提交成功！！！</span>
+     </div>
 </div>     
       
       
@@ -76,8 +288,8 @@ function returnPages(url){
   
 <center>
   <div data-role="footer" data-position="fixed" >
-    <a href="#pageone" data-role="button" data-icon="plus">添加</a>
-    <a href="#pagetwo" data-role="button" data-icon="grid">列表</a>
+    <a href="#pagetwo" data-role="button" data-icon="grid" onclick="refreshList()">列表</a>
+    <a href="#pageone" data-role="button" data-icon="plus">添加</a>       
   </div>
 </center>
   
@@ -99,48 +311,5 @@ function returnPages(url){
 
 
 
-
-
-
-
-<div data-role="page" id="pagetwo">
-  <div data-role="header" data-position="fixed">
-      <a href="#" data-role="button" data-icon="home" data-iconpos="notext" class="ui-btn-right" rel="external" onclick="returnPages('index.html')"></a>
-      <h1>列表</h1>
-  </div>
-  
-
-<div data-role="content">
-     <fieldset data-role="controlgroup"> 
-    <ul data-role="listview">
-     
-          <li data-icon="false">
-                  <label for="red">第一</label>
-                  <input type="checkbox" name="favcolor" id="red" value="red">
-          </li>
-          
-           <li data-icon="false">
-                  <label for="red">第二</label>
-                  <input type="checkbox" name="favcolor" id="red" value="red">
-          </li>
-          
-           <li data-icon="false">
-                  <label for="red">第三</label>
-                  <input type="checkbox" name="favcolor" id="red" value="red">
-          </li>
-
-    </ul>
-      </fieldset>
-</div><!--content-->
-  
-  
-<center>
-  <div data-role="footer" data-position="fixed" >
-    <a href="#pageone" data-role="button" data-icon="plus">添加</a>
-    <a href="#pagetwo" data-role="button" data-icon="grid">列表</a>
-  </div>
-</center>
-  
-</div>
 </body>
 </html>
